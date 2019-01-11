@@ -29,39 +29,19 @@
         <rest_variables/>
         <role_conditions/>
         <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
-
-// 	current.short_description = "This text set by the Debugging Business Rules business rule.";
-// 	var myNum = current.state;
-
-// 	// The function in this try/catch is not defined
-// 	try{
-// 		thisFunctionDoesNotExist();
-// 	}
-// 	catch(err){
-// 		gs.error("NeedIt App: a JavaScript runtime error occurred - " + err);
-// 	}
-
-// 	// This function is not defined and is not part of a try/catch
-//    thisFunctionAlsoDoesNotExist();
-
-	// getNum and setNum demonstrate JavaScript Closure
-	var x = 7;
-
-	function numFunc(){
-		var x = 10;
-		return{
-			getNum: function(){
-				return x;
-			},
-			setNum: function(newNum){
-				x = newNum;
-			}
-		};
+	var niutils = new NeedItUtils();
+	
+	// Check if 'When Needed' date is in the past, using NeedItUtils.
+	if (niutils.isDatePast(current.u_when_needed)) {
+		gs.addErrorMessage("When needed date cannot be in the past. Your request has not been saved to the database.");
+		current.setAbortAction(true);
 	}
-	var callFunc = numFunc();
-	callFunc.getNum();
-	callFunc.setNum(2);
-	callFunc.getNum();
+	
+	// Check if 'When Needed' date is today, using NeedItUtils.
+	if (niutils.isDateToday(current.u_when_needed)) {
+		gs.addErrorMessage("You cannot submit NeedIt requests for today.");
+		current.setAbortAction(true);
+	}
 
 })(current, previous);]]></script>
         <sys_class_name>sys_script</sys_class_name>
@@ -70,7 +50,7 @@
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>256282ef0f3223005de34e9ce1050e31</sys_id>
-        <sys_mod_count>7</sys_mod_count>
+        <sys_mod_count>9</sys_mod_count>
         <sys_name>NeedIt When needed field date</sys_name>
         <sys_overrides/>
         <sys_package display_value="NeedIt" source="x_58872_needit">6ead8e780f603200cd674f8ce1050ed1</sys_package>
@@ -78,7 +58,7 @@
         <sys_scope display_value="NeedIt">6ead8e780f603200cd674f8ce1050ed1</sys_scope>
         <sys_update_name>sys_script_256282ef0f3223005de34e9ce1050e31</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-01-10 19:08:36</sys_updated_on>
+        <sys_updated_on>2019-01-11 16:16:36</sys_updated_on>
         <template/>
         <when>before</when>
     </sys_script>
